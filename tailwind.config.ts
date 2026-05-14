@@ -10,8 +10,11 @@ const config: Config = {
     extend: {
       colors: {
         bg:      "var(--color-bg)",
+        surface: "var(--color-surface)",
         accent:  "var(--color-accent)",
-        gray: {
+        "accent-fg": "var(--color-accent-fg)",
+        border:  "var(--color-border)",
+        muted: {
           100: "var(--color-gray-100)",
           200: "var(--color-gray-200)",
           300: "var(--color-gray-300)",
