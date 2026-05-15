@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import { Copy, Check } from "lucide-react";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 
@@ -131,6 +132,7 @@ function CodeBlock() {
 
 /* ── Section ─────────────────────────────────────────────────────────────── */
 export function APISection() {
+  const isMobile = useIsMobile();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -138,7 +140,7 @@ export function APISection() {
     <section
       id="api"
       style={{
-        padding: "160px 40px",
+        padding: isMobile ? "80px 20px" : "160px 40px",
         background: "transparent",
         position: "relative",
       }}
@@ -149,8 +151,8 @@ export function APISection() {
           maxWidth: 1200,
           margin: "0 auto",
           display: "grid",
-          gridTemplateColumns: "1fr 1.15fr",
-          gap: 80,
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1.15fr",
+          gap: isMobile ? 40 : 80,
           alignItems: "center",
         }}
       >

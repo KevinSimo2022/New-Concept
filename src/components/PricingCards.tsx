@@ -4,6 +4,7 @@ import { useRef, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
 import { Check } from "lucide-react";
 import { BorderBeam } from "./effects/BorderBeam";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 
@@ -277,13 +278,14 @@ function FeaturedCard({ tier }: { tier: typeof tiers[0] }) {
 
 /* ── Section ─────────────────────────────────────────────────────────────── */
 export function PricingCards() {
+  const isMobile = useIsMobile();
   const headingRef = useRef<HTMLDivElement>(null);
   const inView = useInView(headingRef, { once: true, margin: "-80px" });
 
   return (
     <section
       id="pricing"
-      style={{ padding: "160px 40px", background: "transparent", position: "relative", overflow: "hidden" }}
+      style={{ padding: isMobile ? "80px 20px" : "160px 40px", background: "transparent", position: "relative", overflow: "hidden" }}
     >
       {/* Background radial */}
       <div style={{
@@ -323,8 +325,8 @@ export function PricingCards() {
         {/* 3-column layout — featured card overlaps its neighbors */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1.15fr 1fr",
-          gap: 0,
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1.15fr 1fr",
+          gap: isMobile ? 16 : 0,
           alignItems: "center",
         }}>
           <SideCard tier={tiers[0]} index={0} />

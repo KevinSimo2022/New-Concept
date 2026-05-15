@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const bullets = [
   "99.99% uptime SLA guaranteed",
@@ -100,6 +101,7 @@ function GlassSelect({
 }
 
 export function EnterpriseSection() {
+  const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLDivElement>(null);
   const inView = useInView(sectionRef, { once: true, margin: "-100px" });
   const [formData, setFormData] = useState({
@@ -146,7 +148,7 @@ export function EnterpriseSection() {
           margin: "0 auto",
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "80px",
+          gap: isMobile ? "40px" : "80px",
           alignItems: "start",
           position: "relative",
         }}

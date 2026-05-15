@@ -4,6 +4,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useWaveformStore } from "@/store/useWaveformStore";
 import { Meteors } from "./effects/Meteors";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 
@@ -17,6 +18,7 @@ const fadeUp = {
 };
 
 export function Hero() {
+  const isMobile = useIsMobile();
   const triggerPing = useWaveformStore((s) => s.triggerPing);
   const sectionRef = useRef<HTMLElement>(null);
   const [spotlight, setSpotlight] = useState({ x: "50%", y: "40%" });
@@ -50,13 +52,13 @@ export function Hero() {
       style={{
         position: "relative",
         zIndex: 10,
-        height: "100vh",
+        minHeight: "100svh",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         textAlign: "center",
-        padding: "0 24px",
+        padding: isMobile ? "0 20px" : "0 24px",
         overflow: "hidden",
       }}
     >

@@ -2,6 +2,7 @@
 
 import { useRef, useState, useCallback } from "react";
 import { motion, useInView } from "framer-motion";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 
@@ -227,6 +228,7 @@ function Attribution({ name, title }: { name: string; title: string }) {
 
 /* ─── Section ─────────────────────────────────────────────────────────────── */
 export function TestimonialsSection() {
+  const isMobile = useIsMobile();
   const headingRef = useRef<HTMLDivElement>(null);
   const inView = useInView(headingRef, { once: true, margin: "-80px" });
 
@@ -245,7 +247,7 @@ export function TestimonialsSection() {
   return (
     <section
       id="research"
-      style={{ padding: "140px 40px 120px", background: "transparent", position: "relative" }}
+      style={{ padding: isMobile ? "80px 20px 80px" : "140px 40px 120px", background: "transparent", position: "relative" }}
     >
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
@@ -293,12 +295,12 @@ export function TestimonialsSection() {
         {/* ── Row 1: hero quote (2/3) + stat (1/3) ── */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
           gap: 16,
           marginBottom: 16,
         }}>
           {/* Hero quote — spans 2 cols */}
-          <SpotlightCard delay={0.05} extraStyle={{ gridColumn: "span 2" }}>
+          <SpotlightCard delay={0.05} extraStyle={{ gridColumn: isMobile ? "span 1" : "span 2" }}>
             <div style={{ padding: "44px 48px 40px" }}>
               <div style={{
                 fontSize: 72, lineHeight: 0.8, color: "rgba(0,229,204,0.12)",
@@ -370,7 +372,7 @@ export function TestimonialsSection() {
         {/* ── Row 2: three equal cards ── */}
         <div style={{
           display: "grid",
-          gridTemplateColumns: "1fr 1fr 1fr",
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr 1fr",
           gap: 16,
         }}>
           {/* Card 1: Spotlight */}

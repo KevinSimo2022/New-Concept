@@ -43,24 +43,21 @@ export function VideoBackground() {
 
     /* The video plays at a variable speed — scroll velocity controls the rate.
        We lerp toward the target so acceleration/deceleration feel organic.    */
-    let targetRate = 0;
-    let currentRate = 0;
+    const IDLE_RATE = 0.35; // gentle ambient speed when not scrolling
+    let targetRate = IDLE_RATE;
+    let currentRate = IDLE_RATE;
     let lastScrollMs = 0;
     let rafId = 0;
 
     const tick = () => {
-      const idle = Date.now() - lastScrollMs > 180;
-      if (idle) targetRate = 0;
+      const idle = Date.now() - lastScrollMs > 200;
+      if (idle) targetRate = IDLE_RATE;
 
-      currentRate = lerp(currentRate, targetRate, 0.07); // smooth easing
+      currentRate = lerp(currentRate, targetRate, 0.07);
 
       if (v.readyState >= 2) {
-        if (currentRate < 0.02) {
-          if (!v.paused) v.pause();
-        } else {
-          v.playbackRate = Math.min(4, Math.max(0.1, currentRate));
-          if (v.paused) v.play().catch(() => {});
-        }
+        v.playbackRate = Math.min(4, Math.max(0.1, currentRate));
+        if (v.paused) v.play().catch(() => {});
       }
       rafId = requestAnimationFrame(tick);
     };
@@ -121,6 +118,8 @@ export function VideoBackground() {
         ref={videoRef}
         src="/video.mp4"
         muted
+        autoPlay
+        loop
         playsInline
         preload="auto"
         style={{
