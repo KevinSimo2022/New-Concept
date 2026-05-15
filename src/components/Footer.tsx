@@ -1,3 +1,7 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 const links = [
   { label: "Research", href: "#research" },
   { label: "GitHub", href: "#" },
@@ -6,37 +10,105 @@ const links = [
 
 export function Footer() {
   return (
-    <footer className="bg-bg border-t border-border">
-      <div className="mx-auto max-w-content px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6 items-start">
-        <div className="flex flex-col gap-1">
-          <span className="text-white text-xl font-semibold tracking-tight">
+    <footer
+      style={{
+        background: "rgba(10,10,11,0.55)",
+        backdropFilter: "blur(30px)",
+        WebkitBackdropFilter: "blur(30px)",
+        borderTop: "1px solid rgba(255,255,255,0.04)",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 1200,
+          margin: "0 auto",
+          padding: "48px 24px",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: 32,
+          alignItems: "start",
+        }}
+      >
+        <div>
+          <span
+            style={{
+              display: "block",
+              fontSize: "18px",
+              fontWeight: 600,
+              color: "#FFFFFF",
+              letterSpacing: "-0.01em",
+              marginBottom: 4,
+              fontFamily: "var(--font-geist-sans)",
+            }}
+          >
             PNGD™
           </span>
-          <span className="text-sm text-muted-300">Built by Kevin</span>
+          <span
+            style={{
+              fontSize: "13px",
+              color: "#4A4A52",
+              fontFamily: "var(--font-geist-sans)",
+            }}
+          >
+            Built by Kevin
+          </span>
         </div>
 
-        <div className="flex justify-center">
-          <p className="italic text-sm leading-relaxed text-center max-w-[400px] text-muted-100">
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <p
+            style={{
+              fontStyle: "italic",
+              fontSize: "13px",
+              lineHeight: 1.7,
+              textAlign: "center",
+              maxWidth: 340,
+              color: "#71717A",
+              fontFamily: "var(--font-geist-sans)",
+            }}
+          >
             &ldquo;We got you to read the fine print on a ping sound.
             Imagine what we can do for your brand.&rdquo;
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 md:items-end">
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, alignItems: "flex-end" }}>
           {links.map((link) => (
-            <a
+            <motion.a
               key={link.label}
               href={link.href}
-              className="text-sm text-muted-300 transition-colors hover:text-white"
+              whileHover={{ color: "#FFFFFF", x: -2 }}
+              transition={{ duration: 0.15 }}
+              style={{
+                fontSize: "13px",
+                color: "#4A4A52",
+                textDecoration: "none",
+                fontFamily: "var(--font-geist-sans)",
+              }}
             >
               {link.label}
-            </a>
+            </motion.a>
           ))}
         </div>
       </div>
 
-      <div className="border-t border-border py-3 flex justify-center">
-        <span className="text-[11px] text-muted-300">* Adobe Audition</span>
+      <div
+        style={{
+          borderTop: "1px solid rgba(255,255,255,0.04)",
+          padding: "12px 24px",
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <span
+          style={{
+            fontSize: "11px",
+            color: "#27272A",
+            fontFamily: "var(--font-geist-sans)",
+            letterSpacing: "0.04em",
+          }}
+        >
+          * Adobe Audition
+        </span>
       </div>
     </footer>
   );

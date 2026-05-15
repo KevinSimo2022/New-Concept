@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import LenisProvider from "@/components/providers/LenisProvider";
 import { ClientCanvas } from "@/components/ClientCanvas";
+import { ClientVideo } from "@/components/ClientVideo";
+import { ClientParticles } from "@/components/effects/ClientParticles";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -25,7 +27,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-bg text-white`}>
         <LenisProvider>
+          <ClientVideo />
           <ClientCanvas />
+          <ClientParticles />
           {children}
         </LenisProvider>
       </body>
