@@ -105,4 +105,3 @@ export function WaveformCanvas() {
   );
 }
 
-useGLTF.preload("/wave.glb");

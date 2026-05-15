@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ["three", "@react-three/fiber", "@react-three/drei"],
+  },
+};
 
 export default nextConfig;
