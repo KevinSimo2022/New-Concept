@@ -7,7 +7,15 @@ import * as THREE from "three";
 import { useWaveformStore } from "@/store/useWaveformStore";
 
 const CYAN = new THREE.Color("#00E5CC");
-const BASE_EMISSIVE = 0.4;
+const BASE_EMISSIVE = 0.6;
+
+function SceneSetup() {
+  const { gl } = useThree();
+  useEffect(() => {
+    gl.setClearColor(0x000000, 0);
+  }, [gl]);
+  return null;
+}
 
 function WaveformModel() {
   const groupRef = useRef<THREE.Group>(null);
@@ -89,13 +97,16 @@ export function WaveformCanvas() {
       }}
     >
       <Canvas
-        camera={{ position: [0, 0, 4.5], fov: 45 }}
+        camera={{ position: [0, 0, 3.5], fov: 50 }}
         gl={{ antialias: true, alpha: true }}
         style={{ background: "transparent" }}
       >
-        <ambientLight intensity={0.5} />
+        <SceneSetup />
+        <ambientLight intensity={1.2} />
+        <directionalLight position={[0, 0, 5]} intensity={3} color="#ffffff" />
         <directionalLight position={[5, 5, 5]} intensity={2} />
-        <directionalLight position={[-3, -2, 2]} intensity={0.5} color="#00E5CC" />
+        <directionalLight position={[-3, -2, 2]} intensity={1} color="#00E5CC" />
+        <pointLight position={[0, 0, 3]} intensity={4} color="#00E5CC" />
         <Environment preset="city" />
         <WaveformModel />
       </Canvas>
