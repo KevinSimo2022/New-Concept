@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── PNGD Design Tokens ─────────────────────────────────────────────────── */
+:root {
+  /* Background */
+  --color-bg:        #0A0A0B;
+
+  /* Surface (cards, nav) */
+  --color-surface:   #111113;
+
+  /* Accent — cyan, used ONLY on the "Play the ping" button */
+  --color-accent:    #00E5CC;
+  --color-accent-fg: #001a17;
+
+  /* Borders */
+  --color-border:    #2A2A2D;
+  --color-border-hover: #3F3F46;
+
+  /* Grays — text hierarchy */
+  --color-gray-100:  #A0A0A8;
+  --color-gray-200:  #71717A;
+  --color-gray-300:  #4A4A52;
+  --color-gray-400:  #27272A;
+
+  /* White */
+  --color-white:     #FFFFFF;
+
+  /* Typography */
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), 'Courier New', monospace;
+}
+
+/* ─── Base ────────────────────────────────────────────────────────────────── */
+html {
+  background: var(--color-bg);
+  color: var(--color-white);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--color-bg);
+  overscroll-behavior: none;
+}
+
+/* Lenis smooth scroll */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* ─── Layout ──────────────────────────────────────────────────────────────── */
+.content-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* ─── Utilities ───────────────────────────────────────────────────────────── */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
