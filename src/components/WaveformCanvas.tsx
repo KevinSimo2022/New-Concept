@@ -2,37 +2,37 @@
 
 import { useRef, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Environment } from "@react-three/drei";
 import * as THREE from "three";
 import { useWaveformStore } from "@/store/useWaveformStore";
 
-const CYAN = "#00E5CC";
+const CYAN = new THREE.Color("#00E5CC");
+const BASE_EMISSIVE = 0.4;
 
 function WaveformModel() {
   const groupRef = useRef<THREE.Group>(null);
   const { scene } = useGLTF("/wave.glb");
   const { camera } = useThree();
-
   const mouseRef = useRef({ x: 0, y: 0 });
-  const targetCamRef = useRef({ x: 0, y: 0 });
 
-  // Apply material to all meshes once
-  useEffect(() => {
-    scene.traverse((child) => {
+  // Clone scene so the cached GLTF isn't mutated
+  const clonedScene = useRef<THREE.Group | null>(null);
+  if (!clonedScene.current) {
+    clonedScene.current = scene.clone(true);
+    // Apply material to every mesh in the clone
+    clonedScene.current.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        mesh.material = new THREE.MeshStandardMaterial({
+        (child as THREE.Mesh).material = new THREE.MeshStandardMaterial({
           color: CYAN,
-          metalness: 0.8,
+          emissive: CYAN,
+          emissiveIntensity: BASE_EMISSIVE,
+          metalness: 0.7,
           roughness: 0.2,
-          emissive: new THREE.Color(CYAN),
-          emissiveIntensity: 0,
         });
       }
     });
-  }, [scene]);
+  }
 
-  // Track mouse
   useEffect(() => {
     const onMove = (e: MouseEvent) => {
       mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -44,39 +44,35 @@ function WaveformModel() {
 
   useFrame(() => {
     const { scale, emissiveIntensity } = useWaveformStore.getState();
+    if (!groupRef.current || !clonedScene.current) return;
 
-    if (!groupRef.current) return;
-
-    // Y rotation
+    // Slow Y rotation
     groupRef.current.rotation.y += 0.003;
 
-    // Scale
+    // Lerp scale toward store value
     const s = groupRef.current.scale;
-    s.x = THREE.MathUtils.lerp(s.x, scale, 0.08);
-    s.y = THREE.MathUtils.lerp(s.y, scale, 0.08);
-    s.z = THREE.MathUtils.lerp(s.z, scale, 0.08);
+    s.setScalar(THREE.MathUtils.lerp(s.x, scale, 0.08));
 
-    // Emissive intensity
-    scene.traverse((child) => {
+    // Lerp emissive on all meshes
+    const targetEmissive = BASE_EMISSIVE + emissiveIntensity;
+    clonedScene.current.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mat = (child as THREE.Mesh).material as THREE.MeshStandardMaterial;
-        mat.emissiveIntensity = THREE.MathUtils.lerp(
-          mat.emissiveIntensity,
-          emissiveIntensity,
-          0.1
-        );
+        mat.emissiveIntensity = THREE.MathUtils.lerp(mat.emissiveIntensity, targetEmissive, 0.1);
       }
     });
 
-    // Mouse parallax — camera lerp
-    targetCamRef.current.x = mouseRef.current.x * 0.5;
-    targetCamRef.current.y = mouseRef.current.y * 0.3;
-    camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetCamRef.current.x, 0.05);
-    camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetCamRef.current.y, 0.05);
+    // Mouse parallax on camera
+    camera.position.x = THREE.MathUtils.lerp(camera.position.x, mouseRef.current.x * 0.5, 0.05);
+    camera.position.y = THREE.MathUtils.lerp(camera.position.y, mouseRef.current.y * 0.3, 0.05);
     camera.lookAt(0, 0, 0);
   });
 
-  return <primitive ref={groupRef} object={scene} />;
+  return (
+    <group ref={groupRef}>
+      <primitive object={clonedScene.current} />
+    </group>
+  );
 }
 
 export function WaveformCanvas() {
@@ -97,11 +93,12 @@ export function WaveformCanvas() {
         gl={{ antialias: true, alpha: true }}
         style={{ background: "transparent" }}
       >
-        <ambientLight intensity={0.3} />
-        <directionalLight position={[5, 5, 5]} intensity={1.5} />
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 5, 5]} intensity={2} />
+        <directionalLight position={[-3, -2, 2]} intensity={0.5} color="#00E5CC" />
+        <Environment preset="city" />
         <WaveformModel />
       </Canvas>
     </div>
   );
 }
-
