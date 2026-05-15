@@ -103,7 +103,7 @@ function CodeBlock() {
           { key: "frequency_hz",  value: "880",        valueColor: "#f0a040",  type: "num"    },
         ].map(({ key, value, valueColor }, i, arr) => (
           <div key={key} style={{ paddingLeft: 22 }}>
-            <span style={{ color: "#A0A0A8" }}>"{key}"</span>
+            <span style={{ color: "#A0A0A8" }}>&quot;{key}&quot;</span>
             <span style={{ color: "#71717A" }}>: </span>
             <span style={{ color: valueColor }}>{value}</span>
             {i < arr.length - 1 && <span style={{ color: "#71717A" }}>,</span>}
